@@ -1,0 +1,3 @@
+part 1: document nearest neighbor.
+
+	motivation: how does 
