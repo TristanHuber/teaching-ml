@@ -11,6 +11,10 @@ public class Document {
 	private String name;
 	private int size;
 	
+	
+	/*
+	 * Create document using word count, or normalized word count
+	 */
 	public Document(String name, Scanner docScan){
 		wordCounts = new HashMap<String, Double>();
 		this.name = name;
@@ -32,6 +36,9 @@ public class Document {
 		}
 	}
 	
+	/*
+	 * create document using tfidf
+	 */
 	public Document(String name, Scanner docScan, Map<String, Integer> docFrequency, int libSize){
 		if(libSize == 0){
 			throw new IllegalArgumentException();

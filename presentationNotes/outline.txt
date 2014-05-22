@@ -1,3 +1,12 @@
 part 1: document nearest neighbor.
 
-	motivation: how does 
+	motivation: let's say I have a large database of documents, and I want to show my users related works
+	[where does this happen in rl?
+		fb: related articles posts
+		uw-library: http://uwashington.worldcat.org/title/moby-dick/oclc/3280629&referer=brief_results#similar
+		
+	]
+	
+	one way to say that two documents are similar is to say that have similar words
+	
+	

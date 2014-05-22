@@ -11,8 +11,9 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class ClusterMain {
-	public static final String[] LIBRARY = {"grimm.txt", "sherlockHolmes.txt", "hamlet.txt", "kafka.txt",
-											"smallmoby.txt", "huckleberryFinn.txt"};
+	public static final String[] LIBRARY = {"Buchner_DantonsTod.txt", "Buchner_Woyzek.txt",
+											"grimm.txt", "sherlockHolmes.txt", "hamlet.txt", "kafka.txt",
+											"smallmoby.txt", "huckleberryFinn.txt", "shakespeare_analysis.txt"};
 	private static Collection<Document> library;
 	
 	
