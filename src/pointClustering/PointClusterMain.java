@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public class PointClusterMain {
@@ -11,9 +13,9 @@ public class PointClusterMain {
 	public static Color[] CLUSTER_COLORS = {Color.BLUE, Color.RED, Color.GREEN, Color.PINK, Color.YELLOW};
 	public static int LOCATION_DEVIATION = 170;
 	
-	
+	public static boolean TRAILS = false;
 	public static int POINT_COUNT = 50;
-	public static int FRAME_TIME = 5000;
+	public static int FRAME_TIME = 2000;
 	
 	
 	public static void main(String[] args) {
@@ -30,12 +32,19 @@ public class PointClusterMain {
 		
 		boolean converged = false;
 		Collection<Point> centers = initializeCenters(3);
+		for(Point c : centers){
+			c.drawAsCenter(g);
+		}
+		
+		Collection<Point> prevCenters = centers;
 		do {
-			assignPoints(centers, points);
-			drawAll(g, centers, points);
 
-			relocate(centers, points);
-			drawAll(g, centers, points);
+			assignPoints(centers, points);
+			drawAll(g, centers, points, prevCenters);
+			
+			prevCenters = centers;
+			centers = relocate(centers, points);
+			drawAll(g, centers, points, prevCenters);
 			
 		} while (!converged);
 		
@@ -46,8 +55,9 @@ public class PointClusterMain {
 	 * @param centers
 	 * @param points
 	 */
-	private static void relocate(Collection<Point> centers,
+	private static Collection<Point> relocate(Collection<Point> centers,
 			Collection<Point> points) {
+		Collection<Point> result = new HashSet<Point>();
 		for(Point c : centers){
 			int sumX = 0;
 			int sumY = 0;
@@ -59,9 +69,13 @@ public class PointClusterMain {
 					count ++;
 				}
 			}
-			c.setY((int)Math.round(sumY * 1.0 / count));
-			c.setX((int)Math.round(sumX * 1.0 / count));
+			Point newCenter = new Point(0,0);
+			newCenter.setY((int)Math.round(sumY * 1.0 / count));
+			newCenter.setX((int)Math.round(sumX * 1.0 / count));
+			newCenter.setColor(c.getColor());
+			result.add(newCenter);
 		}	
+		return result;
 	}
 
 	/**
@@ -71,7 +85,7 @@ public class PointClusterMain {
 	 * @param points
 	 */
 	private static void drawAll(Graphics g, Collection<Point> centers,
-			Collection<Point> points) {
+			Collection<Point> points, Collection<Point> prevCenters) {
 		
 		try {
 		    Thread.sleep(FRAME_TIME);
@@ -79,16 +93,37 @@ public class PointClusterMain {
 		    Thread.currentThread().interrupt();
 		}
 		
-		g.clearRect(0,0,400,400);
-		g.fillRect(0, 0, 400, 400);
-		
-		for(Point p : points){
-			p.draw(g);
+		if(TRAILS) {
+			for(Point c : centers){
+				for(Point p : prevCenters){
+					if(p.getColor().equals(c.getColor())){
+						g.setColor(Color.BLACK);
+						g.drawLine(p.getX(), p.getY(), c.getX(), c.getY());
+						c.drawAsCenter(g);
+						
+					}
+				}
+			}
+			g.setColor(Color.LIGHT_GRAY);
+			
+			for(Point p : points){
+				p.draw(g);
+			}
+			
+		} else {
+			g.clearRect(0,0,400,400);
+			g.fillRect(0, 0, 400, 400);
+			
+			for(Point p : points){
+				p.draw(g);
+			}
+			
+			for(Point c : centers){
+				c.drawAsCenter(g);
+			}
 		}
+			
 		
-		for(Point c : centers){
-			c.drawAsCenter(g);
-		}
 	}
 
 	/**
