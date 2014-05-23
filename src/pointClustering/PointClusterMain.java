@@ -2,6 +2,7 @@ package pointClustering;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -36,14 +37,15 @@ public class PointClusterMain {
 			c.drawAsCenter(g);
 		}
 		
-		Collection<Point> prevCenters = centers;
+		List<Collection<Point>> prevCenters = new ArrayList<Collection<Point>>();
+		prevCenters.add(centers);
 		do {
 
 			assignPoints(centers, points);
 			drawAll(g, centers, points, prevCenters);
 			
-			prevCenters = centers;
 			centers = relocate(centers, points);
+			prevCenters.add(centers);
 			drawAll(g, centers, points, prevCenters);
 			
 		} while (!converged);
@@ -86,38 +88,43 @@ public class PointClusterMain {
 	 * @param points
 	 */
 	private static void drawAll(Graphics g, Collection<Point> centers,
-			Collection<Point> points, Collection<Point> prevCenters) {
+			Collection<Point> points, List<Collection<Point>> prevCenters) {
 		
 		try {
 		    Thread.sleep(FRAME_TIME);
 		} catch(InterruptedException ex) {
 		    Thread.currentThread().interrupt();
 		}
+		g.clearRect(0,0,400,400);
+		g.fillRect(0, 0, 400, 400);
+		
+		for(Point p : points){
+			p.draw(g);
+		}
 		
 		if(TRAILS) {
-			for(Point c : centers){
-				for(Point p : prevCenters){
-					if(p.getColor().equals(c.getColor())){
-						g.setColor(Color.GRAY);
-						g.drawLine(p.getX(), p.getY(), c.getX(), c.getY());
-						c.drawAsCenter(g);
-						
-					}
+			Collection<Point> prev = prevCenters.get(0);
+			for(int i = 1; i < prevCenters.size(); i++){
+				Collection<Point> current = prevCenters.get(i);
+				for(Point p : current){
+					Point prior = getOfMatchingColor(p, prev);
+					g.setColor(p.getColor());
+					g.drawLine(prior.getX(), prior.getY(), p.getX(), p.getY());
+					
+					Color temp = prior.getColor();
+					prior.setColor(Color.GRAY);
+					prior.drawAsCenter(g);
+					prior.setColor(temp);
 				}
+				prev = current;
+			}
+			for(Point p : prev){
+				p.drawAsCenter(g);
 			}
 			g.setColor(Color.LIGHT_GRAY);
 			
-			for(Point p : points){
-				p.draw(g);
-			}
 			
 		} else {
-			g.clearRect(0,0,400,400);
-			g.fillRect(0, 0, 400, 400);
-			
-			for(Point p : points){
-				p.draw(g);
-			}
 			
 			for(Point c : centers){
 				c.drawAsCenter(g);
@@ -126,6 +133,16 @@ public class PointClusterMain {
 			
 		
 	}
+	
+	private static Point getOfMatchingColor(Point p, Collection<Point> col){
+		for (Point c : col){
+			if(p.getColor().equals(c.getColor())){
+				return c;
+			}
+		}
+		return null;
+	}
+	
 
 	/**
 	 * Assign each point to be part of the cluster whose center is nearest!
