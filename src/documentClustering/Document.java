@@ -173,4 +173,9 @@ public class Document {
 		}
 		return result;
 	}
+	
+	@Override
+	public String toString(){
+		return this.name + " (" + this.size + ")";
+	}
 }

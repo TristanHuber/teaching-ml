@@ -80,6 +80,7 @@ public class PointClusterMain {
 
 	/**
 	 * 
+	 * 
 	 * @param g
 	 * @param centers
 	 * @param points

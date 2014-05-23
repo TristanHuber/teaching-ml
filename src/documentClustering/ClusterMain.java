@@ -53,6 +53,9 @@ public class ClusterMain {
 					documentName = console.next();
 					getClosest(documentName);
 					break;
+				case "q":
+					System.out.println("Goodbye");
+					break;
 				default:
 					System.out.println("unknown command");
 					break;
@@ -89,7 +92,7 @@ public class ClusterMain {
 				}
 			}
 			prevMin = min;
-			System.out.println("\t" + minDoc.getName() + " distance: " + documentDistances.get(minDoc));
+			System.out.printf("\t%-35s %-40s\n", minDoc, "distance: " + documentDistances.get(minDoc));
 		}
 		
 	}
