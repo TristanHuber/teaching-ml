@@ -11,10 +11,10 @@ import java.util.Random;
 public class PointClusterMain {
 	public static int[][] POINT_CENTERS = {{100,100}, {300, 190}, {100,300}};
 	public static Color[] CLUSTER_COLORS = {Color.BLUE, Color.RED, Color.GREEN, Color.PINK, Color.YELLOW};
-	public static int LOCATION_DEVIATION = 170;
+	public static int LOCATION_DEVIATION = 160;
 	
-	public static boolean TRAILS = false;
-	public static int POINT_COUNT = 50;
+	public static boolean TRAILS = true;
+	public static int POINT_COUNT = 70;
 	public static int FRAME_TIME = 2000;
 	
 	
@@ -97,7 +97,7 @@ public class PointClusterMain {
 			for(Point c : centers){
 				for(Point p : prevCenters){
 					if(p.getColor().equals(c.getColor())){
-						g.setColor(Color.BLACK);
+						g.setColor(Color.GRAY);
 						g.drawLine(p.getX(), p.getY(), c.getX(), c.getY());
 						c.drawAsCenter(g);
 						
