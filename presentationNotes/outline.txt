@@ -9,4 +9,13 @@ part 1: document nearest neighbor.
 	
 	one way to say that two documents are similar is to say that have similar words
 	
-	
+	ts, in order of distance:
+	shakespeare_analysis.txt distance: 0.0
+	smallmoby.txt distance: 2274.8272461881584
+	sherlockHolmes.txt distance: 3676.2267340304243
+	grimm.txt distance: 5115.678351890392
+	huckleberryFinn.txt distance: 5994.848955561766
+	kafka.txt distance: 6293.809816001752
+	hamlet.txt distance: 6421.823261348758
+	Buchner_Woyzek.txt distance: 7948.279373549976
+	Buchner_DantonsTod.txt distance: 8106.170365838606

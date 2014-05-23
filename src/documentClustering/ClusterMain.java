@@ -12,16 +12,19 @@ import java.util.Set;
 
 public class ClusterMain {
 	public static final String[] LIBRARY = {"Buchner_DantonsTod.txt", "Buchner_Woyzek.txt",
-											"grimm.txt", "sherlockHolmes.txt", "hamlet.txt", "kafka.txt",
-											"smallmoby.txt", "huckleberryFinn.txt", "shakespeare_analysis.txt"};
+											//"grimm.txt", "sherlockHolmes.txt", "kafka.txt",
+											"smallmoby.txt", "huckleberryFinn.txt", 
+											"shakespeare_analysis.txt",
+											//"HenryIV.txt", "HenryV.txt",
+											"RichardIII.txt"};
 	private static Collection<Document> library;
 	
 	
 	// run shell for interacting with documents.
 	public static void main(String[] args) throws FileNotFoundException {
 
-		//library = parseLibrary();
-		library = parseLibraryTFIDF();
+		library = parseLibrary();
+		//library = parseLibraryTFIDF();
 		
 		Scanner console = new Scanner(System.in);
 		String input;
@@ -168,8 +171,9 @@ public class ClusterMain {
 			Set<String> seenWords = new HashSet<String>();
 			String filePath = "data/" + filename;
 			Scanner fileScan = new Scanner(new File(filePath));
+			fileScan.useDelimiter("[^\\w']+"); // do a bit of cleaning to disregard punctuation
 			while(fileScan.hasNext()){
-				String word = fileScan.next();
+				String word = fileScan.next().toLowerCase();
 				if(!seenWords.contains(word)){
 					seenWords.add(word);
 					if(!docFrequency.containsKey(word)){
