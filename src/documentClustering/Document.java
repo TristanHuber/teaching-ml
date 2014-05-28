@@ -30,7 +30,7 @@ public class Document {
 			wordCounts.put(word, wordCounts.get(word) + 1);
 			size++;
 		}
-		//normalize();
+		normalize();
 	}
 	
 	private void normalize(){
@@ -68,20 +68,23 @@ public class Document {
 			this.size++;
 		}
 		
-		// highest word occurenc (used for normalization of document size)
-		double max = 0.0;
+		// highest word occurence (used for normalization of document size)
+		/*double max = 0.0;
 		for(String word : wordCounts.keySet()){
 			if(wordCounts.get(word) > max){
 				max = wordCounts.get(word);
 			}
-		}
+		}*/
+		double max = this.size;
 				
 		// replace word counts with tf-idf value
 		for(String word : wordCounts.keySet()){
 			double tf = wordCounts.get(word) / max;
 			double idf = Math.log(libSize / (1.0 + docFrequency.get(word)));
 			wordCounts.put(word, tf * idf);
-		}		
+		}
+		
+		
 	}
 	
 	

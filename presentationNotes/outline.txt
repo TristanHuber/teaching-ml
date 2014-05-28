@@ -2,20 +2,115 @@ part 1: document nearest neighbor.
 
 	motivation: let's say I have a large database of documents, and I want to show my users related works
 	[where does this happen in rl?
-		fb: related articles posts
+		fb: related articles posts screen shot!
 		uw-library: http://uwashington.worldcat.org/title/moby-dick/oclc/3280629&referer=brief_results#similar
 		
 	]
 	
-	one way to say that two documents are similar is to say that have similar words
+	one way to say that two documents are similar is to say that they have similar numbers of the same words
 	
-	ts, in order of distance:
-	shakespeare_analysis.txt distance: 0.0
-	smallmoby.txt distance: 2274.8272461881584
-	sherlockHolmes.txt distance: 3676.2267340304243
-	grimm.txt distance: 5115.678351890392
-	huckleberryFinn.txt distance: 5994.848955561766
-	kafka.txt distance: 6293.809816001752
-	hamlet.txt distance: 6421.823261348758
-	Buchner_Woyzek.txt distance: 7948.279373549976
-	Buchner_DantonsTod.txt distance: 8106.170365838606
+	Ex: moby dick is going to have the word whale lots of time, along with the word ahab, and queequeg
+		so, while a news article about whales might also have 'whale' in it, we'd see that as similar with respect
+		to the 'whale' count, but not for 'ahab' or 'queequeg'
+		
+	bag of words model - loss of information = yes
+			but still good enough
+
+	what do we do with this?
+		concept of distance
+			document with lots of 'whale' is "far away" from a document with no 'whale'
+			apply this notion to every word that appears in either document
+			
+			aside: we can think of each word being its own dimension
+					(draw on board)
+			
+		how will we measure this distance?
+			same way we normally measure distance: euclidian distance formula
+			
+			instead of sum over x and y of sqrt((x1 - x2)^2 + (y1 - y2)^2)
+			we'll think of this as:
+				sqrt ( sum over all words w: (doc1.count(w) - doc2.count(w))^2  )
+			
+		what do we do now that we've got this idea of distance?
+			well.... let's just return the closest document.
+			
+		// abstract summary: what we're saying is that two documents are similar
+			if they have similar numbers of the same words
+		
+	demo time:
+		intro ClusterMain
+			summary of docs in corpus:
+				2 by some german guy Buchner (in german)
+				the full text of huckleberry finn
+				partial text of moby dick
+				an analysis of shakespeare's work
+				RichardIII (by shakespeare)
+		
+		goals:
+			we'd hope that the german documents are similar
+			and that an analysis of shakespeare is related to shakespeare
+		
+		
+		demo1:
+			closest RichardIII.txt
+			
+			we wanted RichardIII.txt to be closer... what went wrong here?
+				documents are clustering by size
+			
+			this is because, if I'm a short document, all of my word counts are small, so I cannot possibly be close to a
+			full book like mobydick.txt
+		
+			How do we fix it?
+				// possible aside: this is feature massaging. happens lots in ML
+				rather than using counts, let's use percentages.
+				what percentage of the document is 'whale'. This should eliminate the document size problem
+		
+		demo2:
+			uncomment normalize() in Document constructor
+			> closest RichardIII.txt
+			
+			Hey! this is better, RichardIII.txt is now closer than huck finn
+				this is surely an improvement
+				
+			but... still not ideal since RichardIII.txt is not closest
+			
+			> docInfo shakespeare_analysis.txt
+				the, is the most common word, almost 6 percent of the words are 'the'
+			
+			> wordInfo smallmoby.txt the
+				just over 6%. That's really close to the percentage of 'the's in shakespeare analysis
+			
+			> wordInfo RichardIII.txt the
+				about 3 percent. that's very different from the's in shakespeare analysis.
+				
+			important to realize that the distance between 0.03 and 0.06 is insurmountable, even if the percentage
+			of 'thee' and 'Richard' and 'dost' and 'thou' are all similar, the difference between the's is going to
+			swamp this. // drawing example?
+			
+			how do we fix this?
+				we want to only look at important words. (what does important mean?)
+			
+		demo3:
+			if-idf (term frequency, inverse document frequency)
+			// basically, we want to multiply by the number of times this document has a word in it, and divide by the
+				number of documents that have that word.
+			intuition: 'the' doesn't tell me anything because every document has 'the' in it.
+				but 'whale' does tell me something, since relatively few documents will have 'whale' in them.
+				
+			> closest RichardIII.txt
+	
+	conclusion
+		tf-idf is state of art for the 'bag of words' model. Recently a lot of work has gone into understanding order
+		of words and attempting to extract subjects, verbs, and tone from human-written text (an extremely hard task)
+	
+	## transition ##
+		So, rather than just closest articles there is other information we might be interested in.
+		For example, what genre's are in my library
+		
+	
+				
+				
+				
+				
+				
+				 

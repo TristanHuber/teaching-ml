@@ -23,8 +23,8 @@ public class ClusterMain {
 	// run shell for interacting with documents.
 	public static void main(String[] args) throws FileNotFoundException {
 
-		library = parseLibrary();
-		//library = parseLibraryTFIDF();
+		//library = parseLibrary();
+		library = parseLibraryTFIDF();
 		
 		Scanner console = new Scanner(System.in);
 		String input;
@@ -43,6 +43,11 @@ public class ClusterMain {
 				case "docInfo":
 					String documentName = console.next();
 					docInfo(documentName);
+					break;
+				case "wordInfo":
+					documentName = console.next();
+					String word = console.next();
+					wordInfo(documentName, word);
 					break;
 				case "distance":
 					String doc1 = console.next();
@@ -97,14 +102,6 @@ public class ClusterMain {
 		
 	}
 
-	private static void getDistances(String documentName) {
-		for(Document doc1 : library){
-			for(Document doc2 : library){
-				reportDistance(doc1.getName(), doc2.getName());
-			}
-		}
-	}
-
 	private static void reportDistance(String docName1, String docName2) {
 		Document doc1 = getDoc(docName1);
 		Document doc2 = getDoc(docName2);
@@ -126,7 +123,16 @@ public class ClusterMain {
 		return null;
 	}
 	
-
+	private static void wordInfo(String documentName, String word){
+		Document doc = getDoc(documentName);
+		if(doc != null){
+			System.out.println(documentName + " has the value " + doc.getCount(word) + " for the word \"" + word + "\"");
+		} else {
+			System.out.println("No such document: " + documentName);
+		}
+	}
+	
+	
 	private static void docInfo(String documentName) {
 		Document doc = getDoc(documentName);
 		if(doc != null){
@@ -151,6 +157,7 @@ public class ClusterMain {
 		System.out.println("Available commands are:");
 		System.out.println("\tls : list all available documents");
 		System.out.println("\tdocInfo <documentName> : provide information about a document");
+		System.out.println("\twordInfo <documentName> <word>: display the count of words in a given document");
 		System.out.println("\tclosest <documentName> : list other documents ordered by distance to this document");
 		System.out.println("\tdistance <documentName> <documentName> : report distance between two documents");
 		System.out.println("\tq : quit");

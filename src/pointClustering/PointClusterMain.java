@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Random;
 
 public class PointClusterMain {
-	public static int[][] POINT_CENTERS = {{100,100}, {300, 190}, {100,300}, {200, 200}};
-	public static Color[] CLUSTER_COLORS = {Color.BLUE, Color.RED, Color.GREEN, Color.PINK, Color.YELLOW};
+	public static int[][] POINT_CENTERS = {{100,100}, {300, 190}, {100,300}};//, {200, 200}};
+	public static Color[] CLUSTER_COLORS = {Color.BLUE, Color.RED, Color.GREEN, Color.YELLOW, Color.YELLOW};
 	public static int LOCATION_DEVIATION = 80;
 	
-	public static boolean TRAILS = false;
+	public static boolean TRAILS = true;
 	public static int POINT_COUNT = 100;
-	public static int FRAME_TIME = 2000;
+	public static int FRAME_TIME = 3000;
 	
 	
 	public static void main(String[] args) {
@@ -72,8 +72,14 @@ public class PointClusterMain {
 				}
 			}
 			Point newCenter = new Point(0,0);
-			newCenter.setY((int)Math.round(sumY * 1.0 / count));
-			newCenter.setX((int)Math.round(sumX * 1.0 / count));
+			if(count == 0){
+				newCenter.setX(c.getX());
+				newCenter.setY(c.getY());
+			} else {
+				newCenter.setY((int)Math.round(sumY * 1.0 / count));
+				newCenter.setX((int)Math.round(sumX * 1.0 / count));
+			}
+			
 			newCenter.setColor(c.getColor());
 			result.add(newCenter);
 		}	
