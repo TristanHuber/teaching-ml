@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Random;
 
 public class PointClusterMain {
-	public static int[][] POINT_CENTERS = {{100,100}, {300, 190}, {100,300}};
+	public static int[][] POINT_CENTERS = {{100,100}, {300, 190}, {100,300}, {200, 200}};
 	public static Color[] CLUSTER_COLORS = {Color.BLUE, Color.RED, Color.GREEN, Color.PINK, Color.YELLOW};
-	public static int LOCATION_DEVIATION = 160;
+	public static int LOCATION_DEVIATION = 80;
 	
-	public static boolean TRAILS = true;
-	public static int POINT_COUNT = 70;
+	public static boolean TRAILS = false;
+	public static int POINT_COUNT = 100;
 	public static int FRAME_TIME = 2000;
 	
 	
@@ -32,7 +32,7 @@ public class PointClusterMain {
 		}
 		
 		boolean converged = false;
-		Collection<Point> centers = initializeCenters(3);
+		Collection<Point> centers = initializeCenters(POINT_CENTERS.length);
 		for(Point c : centers){
 			c.drawAsCenter(g);
 		}
